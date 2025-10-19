@@ -1,0 +1,66 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Rainfall distribution density plot from daily weather data with city selector.",
+  "background": "rgba(255,255,255,0.15)", 
+  "data": {
+    "url": "../data/raw.csv",
+    "format": {
+      "type": "tsv",
+      "parse": {
+        "Rainfall": "number"
+      }
+    }
+  },
+  "params": [
+    {
+      "name": "selectedCity",
+      "bind": {
+        "input": "select",
+        "options": [
+          "Albury","BadgerysCreek","Cobar","CoffsHarbour","Moree","Newcastle",
+          "NorahHead","NorfolkIsland","Penrith","Richmond","Sydney","SydneyAirport",
+          "WaggaWagga","Williamtown","Wollongong","Canberra","Tuggeranong",
+          "MountGinini","Ballarat","Bendigo","Sale","MelbourneAirport","Melbourne",
+          "Mildura","Nhil","Portland","Watsonia","Dartmoor","Brisbane","Cairns",
+          "GoldCoast","Townsville","Adelaide","MountGambier","Nuriootpa","Woomera",
+          "Albany","Witchcliffe","PearceRAAF","PerthAirport","Perth","SalmonGums",
+          "Walpole","Hobart","Launceston","AliceSprings","Darwin","Katherine","Uluru"
+        ],
+        "name": "Select City: "
+      },
+      "value": "Albury"
+    }
+  ],
+  "transform": [
+    { "filter": "datum.Location == selectedCity" },
+    { "filter": "isValid(datum.Rainfall) && datum.Rainfall != null && !isNaN(datum.Rainfall)" },
+    {
+      "density": "Rainfall",
+      "bandwidth": 1,
+      "extent": [0,8]
+    },{
+    "calculate": "datum.density * 100",
+    "as": "density_percent"
+  }
+  ],
+  "width": 370,
+  "height": 200,
+  "mark": {
+    "type": "area",
+    "color": "#4C78A8",
+    "opacity": 0.7
+  },
+  "encoding": {
+    "x": {
+      "field": "value",
+      "type": "quantitative",
+      "title": "Rainfall (mm)"
+    },
+    "y": {
+      "field": "density_percent",
+      "type": "quantitative",
+      "title": "likelihood (%)"
+    }
+  },
+  "title": "Distribution of Daily Rainfall by City"
+}

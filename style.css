@@ -1,0 +1,138 @@
+/* --- Root Variables --- */
+:root {
+  --box-opacity: 0.35; /* Change this to adjust all boxes' transparency */
+  --box-radius: 16px; /* Border radius for boxes */
+  --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.09); /* Default shadow */
+  --hover-shadow: 0 12px 30px rgba(0, 0, 0, 0.12); /* Hover shadow */
+}
+
+/* --- General Page Styles --- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px;
+  background: #f0f2f5;
+  color: #333;
+  overflow-y: auto; /* Allows vertical scrolling */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-weight: 600;
+  color: #222;
+}
+
+.map-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 60px 0;
+  position: relative;
+  z-index: -9999; /* ensures it's above the particle background */
+}
+
+.map-image {
+  width: 80%;
+  max-width: 500px;
+  height: auto;
+  opacity: 1;
+  border-radius: 12px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* --- Dashboard Layout --- */
+.dashboard {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: center;
+  gap: 30px;
+  padding: 10px;
+}
+
+/* --- Description Card --- */
+.description-card {
+  background-color: rgba(255, 255, 255, var(--box-opacity));
+  border-radius: var(--box-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  flex: 1 1 400px;
+  max-width: 420px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.description-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--hover-shadow);
+}
+
+.description-card h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+  color: #222; /* Fully opaque text */
+}
+
+.description-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555; /* Fully opaque text */  
+}
+
+.light-blue-bar {
+  width: 100%;                 /* Full width */
+  height: 50px;                /* Adjust height as needed */
+  background-color: #a8d0ff;  /* Light blue color */
+  border-radius: var(--box-radius);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Optional subtle shadow */
+  display: flex;
+  align-items: center;         /* Vertical center for any content inside */
+  justify-content: center;     /* Horizontal center for content */
+  position: relative;          /* Keeps it in normal flow */
+  z-index: 1000;               /* Stays above most elements */
+}
+
+/* --- Chart Containers --- */
+.chart, .graph-small {
+  background-color: rgba(255, 255, 255, var(--box-opacity));
+  border-radius: var(--box-radius);
+  box-shadow: var(--box-shadow);
+  width: 93%;
+  padding: 15px;
+  flex: 1 1 400px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+} 
+
+.chart{
+  max-width: 1050px;
+  min-height: 150px;
+}
+
+/* --- Optional: Gradient Variants --- */
+.chart.gradient, .graph-small.gradient {
+  background: linear-gradient(135deg, rgba(255,255,255,var(--box-opacity)), rgba(248,250,255,var(--box-opacity)));
+}
+
+/* --- Small Graph Specifics --- */
+.graph-small {
+  max-width: 500px;
+  min-height: 250px;
+}
+.chart:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--hover-shadow);
+}
+
+/* --- Scrollable Page Fix --- */
+body, html {
+  height: 100%;
+  width: 100%;
+}

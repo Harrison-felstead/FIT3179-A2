@@ -1,0 +1,30 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Bar chart showing the number of rainy days per city.",  
+  "background": "rgba(255,255,255,0.15)", 
+  "data": {
+    "url": "../data/rainDays.csv",
+    "format": { "type": "tsv", "parse": {"rainDays": "number"} }
+  },
+  "mark": "bar",
+  "encoding": {
+    "x": {
+      "field": "Location",
+      "type": "nominal",
+      "axis": {"labelAngle": -45, "title": "City"},
+      "sort": "-y"
+    },
+    "y": {
+      "field": "rainDays",
+      "type": "quantitative",
+      "title": "Rainy Days per Year"
+    },
+    "tooltip": [
+      {"field": "Location", "type": "nominal", "title": "City"},
+      {"field": "rainDays", "type": "quantitative", "title": "Average number of rainy days per year"}
+    ]
+  },
+  "width": {"step": 18},
+  "height": 400,
+  "title": "Average Annual Rainy Days by Australian City"
+}

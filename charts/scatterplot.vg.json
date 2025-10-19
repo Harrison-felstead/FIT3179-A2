@@ -1,0 +1,82 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Scatterplot of daily temperatures with year and station filter, showing Max/Min temps.", 
+  "background": "rgba(255,255,255,0.15)", 
+
+  "data": {
+    "url": "../data/raw.csv",
+    "format": {
+      "type": "tsv",
+      "parse": {"Date": "date:'%d/%m/%Y'"}
+    }
+  },
+  "params": [
+    {
+      "name": "selectedCity",
+      "value": "Adelaide"
+    },
+    {
+      "name": "selectedYear",
+      "value": 2013,
+      "bind": {
+        "input": "select",
+        "options": [2008,2009,2010,2011,2012,2013,2014,2015,2016,2017],
+        "name": "Year: "
+      }
+    }
+  ],
+  "transform": [
+    { "filter": "selectedCity == null || datum.Location == selectedCity" },
+    { "calculate": "year(datum.Date)", "as": "Year" },
+    { "filter": "selectedYear == null || datum.Year == selectedYear" },
+    { "calculate": "month(datum.Date)", "as": "Month" },
+    { "calculate": "dayofyear(datum.Date)", "as": "DayOfYear" },
+    {
+      "calculate": "[{type:'Max', temp: datum.MaxTemp},{type:'Min', temp: datum.MinTemp}]",
+      "as": "TempArray"
+    },
+    { "flatten": ["TempArray"], "as": ["TempTypeObj"] },
+    { "calculate": "datum.TempTypeObj.type", "as": "TempType" },
+    { "calculate": "datum.TempTypeObj.temp", "as": "Temperature" }
+  ],
+  "mark": {
+    "type": "point",
+    "filled": true,
+    "size": 50,
+    "opacity": 0.6
+  },
+  "encoding": {
+    "x": {
+      "field": "DayOfYear",
+      "type": "quantitative",
+      "title": "Month",
+      "axis": {
+        "tickCount": 12,
+        "values": [15, 46, 75, 105, 135, 166, 196, 227, 258, 288, 319, 349],
+        "labelExpr": "['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.value ? floor((datum.value-1)/30.5) : 0]"
+      }
+    },
+    "y": {
+      "field": "Temperature",
+      "type": "quantitative",
+      "title": "Temperature (°C)"
+    },
+    "color": {
+      "field": "TempType",
+      "type": "nominal",
+      "title": "Temperature Type",
+      "scale": {"domain": ["Max", "Min"], "range": ["red", "blue"]},
+      "legend": null
+    },
+    "tooltip": [
+      {"field": "Date", "type": "temporal", "title": "Date"},
+      {"field": "Temperature", "type": "quantitative", "title": "Temperature (°C)"},
+      {"field": "TempType", "type": "nominal", "title": "Temp Type"},
+      {"field": "Year", "type": "nominal"},
+      {"field": "Location", "type": "nominal"}
+    ]
+  },
+  "width": 900,
+  "height": 400,
+  "title": "Daily Max and Min Temperatures by Station and Year"
+}

@@ -1,0 +1,232 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "description": "Wind Direction Radar Chart with dynamic inner (R_sm) and outer (R_la) rings per city and tooltips, centered in canvas.",
+  "width": 400,
+  "height": 400,
+  "padding": 40,
+  "autosize": {"type": "none", "contains": "padding"},
+  "title": "Number of days Wind direction radar chart",
+
+  "signals": [
+    {"name": "radius", "update": "width / 2"},
+    {
+      "name": "directions",
+      "value": [
+        "N","NNE","NE","ENE","E","ESE","SE","SSE",
+        "S","SSW","SW","WSW","W","WNW","NW","NNW"
+      ]
+    },
+    {
+      "name": "selectedCity",
+      "value": "Albury"
+    }
+  ],
+
+  "data": [
+    {
+      "name": "table",
+      "url": "../data/windDir.csv",
+      "format": {"type": "tsv"},
+      "transform": [
+        {"type": "filter", "expr": "datum.Location == selectedCity"},
+        {
+          "type": "fold",
+          "fields": [
+            "N","NNE","NE","ENE","E","ESE","SE","SSE",
+            "S","SSW","SW","WSW","W","WNW","NW","NNW"
+          ],
+          "as": ["key", "value"]
+        }
+      ]
+    },
+    {
+      "name": "radiusValues",
+      "url": "data/windDir.csv",
+      "format": {"type": "tsv"},
+      "transform": [
+        {"type": "filter", "expr": "datum.Location == selectedCity"},
+        {"type": "formula", "as": "R_sm", "expr": "datum.R_sm"},
+        {"type": "formula", "as": "R_la", "expr": "datum.R_la"}
+      ]
+    },
+    {
+      "name": "keys",
+      "source": "table",
+      "transform": [{"type": "aggregate", "groupby": ["key"]}]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "radial",
+      "type": "linear",
+      "range": {"signal": "[0, radius]"},
+      "domain": {"data": "table", "field": "value"},
+      "zero": true
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "group",
+      "encode": {
+        "enter": {
+          "x": {"signal": "width / 2"},
+          "y": {"signal": "height / 2"},
+          "width": {"signal": "width"},
+          "height": {"signal": "height"}
+        }
+      },
+      "marks": [
+        {
+          "type": "line",
+          "from": {"data": "table"},
+          "encode": {
+            "enter": {
+              "interpolate": {"value": "linear-closed"},
+              "x": {
+                "signal": "scale('radial', datum.value) * cos((2 * PI * indexof(directions, datum.key)/16) - PI/2)"
+              },
+              "y": {
+                "signal": "scale('radial', datum.value) * sin((2 * PI * indexof(directions, datum.key)/16) - PI/2)"
+              },
+              "stroke": {"value": "#0077b6"},
+              "strokeWidth": {"value": 2},
+              "fill": {"value": "#90e0ef"},
+              "fillOpacity": {"value": 0.2}
+            }
+          }
+        },
+        {
+          "type": "symbol",
+          "from": {"data": "table"},
+          "encode": {
+            "enter": {
+              "x": {
+                "signal": "scale('radial', datum.value) * cos((2 * PI * indexof(directions, datum.key)/16) - PI/2)"
+              },
+              "y": {
+                "signal": "scale('radial', datum.value) * sin((2 * PI * indexof(directions, datum.key)/16) - PI/2)"
+              },
+              "size": {"value": 50},
+              "fill": {"value": "#0077b6"},
+              "stroke": {"value": "white"},
+              "strokeWidth": {"value": 1}
+            },
+            "update": {
+              "tooltip": {
+                "signal": "'Wind direction is ' + datum.key + '\\ an average of ' + datum.value + ' days in a year.'"
+              }
+            },
+            "hover": {
+              "fill": {"value": "#00b4d8"},
+              "size": {"value": 100}
+            }
+          }
+        },
+        {
+          "type": "rule",
+          "from": {"data": "keys"},
+          "encode": {
+            "enter": {
+              "x": {"value": 0},
+              "y": {"value": 0},
+              "x2": {
+                "signal": "radius * cos((2 * PI * indexof(directions, datum.key)/16) - PI/2)"
+              },
+              "y2": {
+                "signal": "radius * sin((2 * PI * indexof(directions, datum.key)/16) - PI/2)"
+              },
+              "stroke": {"value": "#ddd"},
+              "strokeWidth": {"value": 1}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "from": {"data": "keys"},
+          "encode": {
+            "enter": {
+              "x": {
+                "signal": "(radius + 12) * cos((2 * PI * indexof(directions, datum.key)/16) - PI/2)"
+              },
+              "y": {
+                "signal": "(radius + 12) * sin((2 * PI * indexof(directions, datum.key)/16) - PI/2)"
+              },
+              "text": {"field": "key"},
+              "align": {"value": "center"},
+              "baseline": {"value": "middle"},
+              "fill": {"value": "black"},
+              "fontSize": {"value": 12},
+              "fontWeight": {"value": "bold"}
+            }
+          }
+        },
+        {
+          "type": "arc",
+          "from": {"data": "radiusValues"},
+          "encode": {
+            "enter": {
+              "x": {"value": 0},
+              "y": {"value": 0},
+              "startAngle": {"value": 0},
+              "endAngle": {"value": 6.283},
+              "innerRadius": {"value": 0},
+              "outerRadius": {"signal": "scale('radial', datum.R_sm)"},
+              "stroke": {"value": "#aaa"},
+              "strokeDash": {"value": [4,2]},
+              "fillOpacity": {"value": 0}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "from": {"data": "radiusValues"},
+          "encode": {
+            "enter": {
+              "x": {"signal": "scale('radial', datum.R_sm)"},
+              "y": {"value": -5},
+              "text": {"signal": "datum.R_sm + ' days'"},
+              "fill": {"value": "#555"},
+              "align": {"value": "center"},
+              "baseline": {"value": "bottom"},
+              "fontSize": {"value": 10}
+            }
+          }
+        },
+        {
+          "type": "arc",
+          "from": {"data": "radiusValues"},
+          "encode": {
+            "enter": {
+              "x": {"value": 0},
+              "y": {"value": 0},
+              "startAngle": {"value": 0},
+              "endAngle": {"value": 6.283},
+              "innerRadius": {"value": 0},
+              "outerRadius": {"signal": "scale('radial', datum.R_la)"},
+              "stroke": {"value": "#aaa"},
+              "strokeDash": {"value": [4,2]},
+              "fillOpacity": {"value": 0}
+            }
+          }
+        },
+        {
+          "type": "text",
+          "from": {"data": "radiusValues"},
+          "encode": {
+            "enter": {
+              "x": {"signal": "scale('radial', datum.R_la)"},
+              "y": {"value": -5},
+              "text": {"signal": "datum.R_la + ' days'"},
+              "fill": {"value": "#555"},
+              "align": {"value": "center"},
+              "baseline": {"value": "bottom"},
+              "fontSize": {"value": 10}
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

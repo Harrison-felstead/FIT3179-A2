@@ -1,0 +1,62 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 450,
+  "title": "Average Temperatures Across Australia",
+  "projection": {"type": "mercator", "scale": 600, "center": [134, -27]},
+  "background": "rgba(255,255,255,0.15)", 
+  "params": [
+    {
+      "name": "month",
+      "value": 1,
+      "bind": {"input": "range", "min": 1, "max": 12, "step": 1, "name": "Month: "}
+    },
+    {
+      "name": "tempType",
+      "value": "high",
+      "bind": {"input": "radio", "options": ["Maximum", "Minimum"], "name": "View: "}
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "url": "../charts/AustraliaMap.json",
+        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+      },
+      "transform": [{"filter": "datum.properties.NAME === 'Australia'"}],
+      "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+    },
+    {
+      "data": {"url": "../data/Mapdata.csv", "format": {"type": "tsv"}},
+      "transform": [
+        {"calculate": "datum[month + ' -high']", "as": "selected_high"},
+        {"calculate": "datum[month + ' -low']", "as": "selected_low"},
+        {
+          "calculate": "tempType === 'high' ? datum[month + ' -high'] : datum[month + ' -low']",
+          "as": "selected_temp"
+        },
+        {
+          "calculate": "tempType === 'high' ? 'reds' : 'blues'",
+          "as": "color_scheme"
+        }
+      ],
+      "mark": {"type": "circle"},
+      "encoding": {
+        "longitude": {"field": "Longitude", "type": "quantitative"},
+        "latitude": {"field": "Latitude", "type": "quantitative"},
+        "color": {
+          "field": "selected_temp",
+          "type": "quantitative",
+          "title": "Temperature (°C)",
+          "scale": {"range": ["blue","red"], "domain": [-5, 45]}
+        },
+        "size": {"value": 150},
+        "tooltip": [
+          {"field": "Location", "type": "nominal", "title": "City"},
+          {"field": "selected_high", "type": "quantitative", "title": "Avg High (°C)"},
+          {"field": "selected_low", "type": "quantitative", "title": "Avg Low (°C)"}
+        ]
+      }
+    }
+  ]
+}
