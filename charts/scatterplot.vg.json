@@ -4,7 +4,7 @@
   "background": "rgba(255,255,255,0.15)", 
 
   "data": {
-    "url": "../data/raw.csv",
+    "url": "data/raw.csv",
     "format": {
       "type": "tsv",
       "parse": {"Date": "date:'%d/%m/%Y'"}

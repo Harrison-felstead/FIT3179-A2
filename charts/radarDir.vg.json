@@ -25,7 +25,7 @@
   "data": [
     {
       "name": "table",
-      "url": "../data/windDir.csv",
+      "url": "data/windDir.csv",
       "format": {"type": "tsv"},
       "transform": [
         {"type": "filter", "expr": "datum.Location == selectedCity"},

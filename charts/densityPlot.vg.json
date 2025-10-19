@@ -3,7 +3,7 @@
   "description": "Rainfall distribution density plot from daily weather data with city selector.",
   "background": "rgba(255,255,255,0.15)", 
   "data": {
-    "url": "../data/raw.csv",
+    "url": "data/raw.csv",
     "format": {
       "type": "tsv",
       "parse": {
