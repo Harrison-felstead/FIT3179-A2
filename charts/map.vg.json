@@ -4,7 +4,7 @@
   "height": 450,
   "title": "Average Temperatures Across Australia",
   "projection": {"type": "mercator", "scale": 600, "center": [134, -27]},
-  "background": "rgba(255,255,255,0.15)", 
+  "background": "rgba(255,255,255,0.15)",
   "params": [
     {
       "name": "month",
@@ -13,8 +13,8 @@
     },
     {
       "name": "tempType",
-      "value": "high",
-      "bind": {"input": "radio", "options": ["Maximum", "Minimum"], "name": "View: "}
+      "value": "Maximum",
+      "bind": {"input": "radio", "options": ["Maximum", "Minimum"], "name": "Temperature Type: "}
     }
   ],
   "layer": [
@@ -29,15 +29,9 @@
     {
       "data": {"url": "data/Mapdata.csv", "format": {"type": "tsv"}},
       "transform": [
-        {"calculate": "datum[month + ' -high']", "as": "selected_high"},
-        {"calculate": "datum[month + ' -low']", "as": "selected_low"},
         {
-          "calculate": "tempType === 'high' ? datum[month + ' -high'] : datum[month + ' -low']",
+          "calculate": "tempType === 'Maximum' ? datum[month + ' -high'] : datum[month + ' -low']",
           "as": "selected_temp"
-        },
-        {
-          "calculate": "tempType === 'high' ? 'reds' : 'blues'",
-          "as": "color_scheme"
         }
       ],
       "mark": {"type": "circle"},
@@ -48,13 +42,13 @@
           "field": "selected_temp",
           "type": "quantitative",
           "title": "Temperature (°C)",
-          "scale": {"range": ["blue","red"], "domain": [-5, 45]}
+          "scale": {"range": ["blue", "red"], "domain": [-5, 45]}
         },
         "size": {"value": 150},
         "tooltip": [
           {"field": "Location", "type": "nominal", "title": "City"},
-          {"field": "selected_high", "type": "quantitative", "title": "Avg High (°C)"},
-          {"field": "selected_low", "type": "quantitative", "title": "Avg Low (°C)"}
+          {"field": " -high", "type": "quantitative", "title": "Avg High (°C)"},
+          {"field": " -low", "type": "quantitative", "title": "Avg Low (°C)"}
         ]
       }
     }
