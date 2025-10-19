@@ -3,7 +3,7 @@
   "description": "Bar chart showing the number of rainy days per city.",  
   "background": "rgba(255,255,255,0.15)", 
   "data": {
-    "url": "../data/rainDays.csv",
+    "url": "data/rainDays.csv",
     "format": { "type": "tsv", "parse": {"rainDays": "number"} }
   },
   "mark": "bar",
