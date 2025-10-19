@@ -98,9 +98,9 @@ h1 {
 
 /* --- Chart Containers --- */
 .chart, .graph-small {
-  background-color: rgba(255, 255, 255, var(--box-opacity));
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: var(--box-radius);
-  box-shadow: var(--box-shadow);
+  box-shadow: null;
   width: 93%;
   padding: 15px;
   flex: 1 1 400px;
@@ -116,15 +116,10 @@ h1 {
   min-height: 150px;
 }
 
-/* --- Optional: Gradient Variants --- */
-.chart.gradient, .graph-small.gradient {
-  background: linear-gradient(135deg, rgba(255,255,255,var(--box-opacity)), rgba(248,250,255,var(--box-opacity)));
-}
-
 /* --- Small Graph Specifics --- */
 .graph-small {
   max-width: 500px;
-  min-height: 250px;
+  min-height: 150px;
 }
 .chart:hover{
   transform: translateY(-3px);
