@@ -48,7 +48,7 @@
         },
         "size": {"value": 150},
         "tooltip": [
-          {"field": "Location", "type": "nominal", "title": "City"},
+          {"field": "Location", "type": "nominal"},
           {"field": "selected_high", "type": "quantitative", "title": "Avg High (°C)"},
           {"field": "selected_low", "type": "quantitative", "title": "Avg Low (°C)"}
         ]

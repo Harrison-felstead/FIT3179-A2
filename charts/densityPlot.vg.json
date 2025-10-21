@@ -17,14 +17,14 @@
       "bind": {
         "input": "select",
         "options": [
-          "Albury","BadgerysCreek","Cobar","CoffsHarbour","Moree","Newcastle",
-          "NorahHead","NorfolkIsland","Penrith","Richmond","Sydney","SydneyAirport",
-          "WaggaWagga","Williamtown","Wollongong","Canberra","Tuggeranong",
-          "MountGinini","Ballarat","Bendigo","Sale","MelbourneAirport","Melbourne",
-          "Mildura","Nhil","Portland","Watsonia","Dartmoor","Brisbane","Cairns",
-          "GoldCoast","Townsville","Adelaide","MountGambier","Nuriootpa","Woomera",
-          "Albany","Witchcliffe","PearceRAAF","PerthAirport","Perth","SalmonGums",
-          "Walpole","Hobart","Launceston","AliceSprings","Darwin","Katherine","Uluru"
+          "Adelaide","AliceSprings","Albury","Albany","Ballarat","BadgerysCreek",
+          "Bendigo","Brisbane","Cairns","Canberra","Cobar","CoffsHarbour",
+          "Dartmoor","Darwin","GoldCoast","Hobart","Katherine","Launceston",
+          "Melbourne","MelbourneAirport","Moree","MountGambier","MountGinini",
+          "Newcastle","NorahHead","NorfolkIsland","Nhil","Nuriootpa","Penrith",
+          "Perth","PerthAirport","Portland","Richmond","SalmonGums","Sale",
+          "Sydney","SydneyAirport","Townsville","Tuggeranong","Uluru",
+          "WaggaWagga","Watsonia","Walpole","Williamtown","Witchcliffe","Wollongong"
         ],
         "name": "Select City: "
       },
